@@ -33,6 +33,7 @@ for i in range(iterations - 1):
 
     v[i+1] = v[i] + dt*a[i]
 
+    # we correct either the position or velocity, depending on which is higher
     if abs(m*v[i]) > abs(k*x[i]):
         if v[i] > 0:
             v[i+1] = sqrt( (2*energy[0]-k*x[i+1]**2)/m )
