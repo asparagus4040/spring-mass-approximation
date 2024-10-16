@@ -28,14 +28,10 @@ a[0] = -k/m * x0
 energy[0] = 0.5*k*(x0**2) + 0.5*m*(v0**2)
 
 for i in range(iterations - 1):
-    # x(n+1) = x(n) + dt*v(n) + 0.5*dt**2*a(n)
     x[i+1] = x[i] + dt*v[i] + 0.5*(dt**2)*a[i]
 
-    # v(n+1)
     v[i+1] = v[i] + dt*a[i]
-    #v[i+1] = (x[i+1] - x[i])/dt
 
-    # a(n+1) = -k/m * x(n+1)
     a[i+1] = -k/m * x[i+1]
 
     # energy should stay constant
