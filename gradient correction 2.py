@@ -1,3 +1,6 @@
+# This one works just like the gradient correction,
+# but it can correct the energy both ways.
+
 import matplotlib.pyplot as plt
 import numpy as np
 from math import sqrt
@@ -13,7 +16,7 @@ v0 = 1
 # simulation parameters
 dt = 0.1
 iterations = 200
-correction_factor = 0.005
+correction_factor = 0.1
 max_correction_steps = 50
 
 # empty arrays
@@ -38,16 +41,29 @@ for i in range(iterations - 1):
     # energy should stay constant
     energy[i+1] = 0.5*k*(x[i+1]**2) + 0.5*m*(v[i+1]**2)
 
-    # correction (only goes downwards)
+    # correction
     current_cor_steps = 0
-    while energy[i+1] > energy[0] and current_cor_steps < max_correction_steps:
-        gradient_magnitude = sqrt( (k*x[i+1])**2 + (m*v[i+1])**2 )
+    if energy[i+1] > energy[0]:
+        # reduce the energy
+        while energy[i+1] > energy[0] and current_cor_steps < max_correction_steps:
+            gradient_magnitude = sqrt( (k*x[i+1])**2 + (m*v[i+1])**2 )
 
-        x[i+1] = x[i+1] - correction_factor * k * x[i+1] / gradient_magnitude
-        v[i+1] = v[i+1] - correction_factor * m * v[i+1] / gradient_magnitude
+            x[i+1] = x[i+1] - correction_factor * k * x[i+1] / gradient_magnitude
+            v[i+1] = v[i+1] - correction_factor * m * v[i+1] / gradient_magnitude
 
-        energy[i+1] = 0.5*k*(x[i+1]**2) + 0.5*m*(v[i+1]**2)
-        current_cor_steps += 1
+            energy[i+1] = 0.5*k*(x[i+1]**2) + 0.5*m*(v[i+1]**2)
+            current_cor_steps += 1
+
+    elif energy[i+1] < energy[0]:
+        # increase the energy
+        while energy[i+1] < energy[0] and current_cor_steps < max_correction_steps:
+            gradient_magnitude = sqrt( (k*x[i+1])**2 + (m*v[i+1])**2 )
+
+            x[i+1] = x[i+1] + correction_factor * k * x[i+1] / gradient_magnitude
+            v[i+1] = v[i+1] + correction_factor * m * v[i+1] / gradient_magnitude
+
+            energy[i+1] = 0.5*k*(x[i+1]**2) + 0.5*m*(v[i+1]**2)
+            current_cor_steps += 1
     
     # store number of correction steps needed
     correction_steps[i+1] = current_cor_steps
@@ -57,7 +73,7 @@ for i in range(iterations - 1):
 # get max energy deviation
 energy_min = min(energy)
 energy_max = max(energy)
-energy_deviation = (max(energy) - min(energy))/energy[0]
+energy_deviation = (energy_max - energy_min)/energy[0]
 print("min energy:", energy_min)
 print("max energy:", energy_max)
 print("energy deviation:", energy_deviation*100, "%")

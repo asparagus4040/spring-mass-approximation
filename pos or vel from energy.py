@@ -7,7 +7,7 @@ m = 1
 k = 3
 
 # initial conditions
-x0 = 0
+x0 = 1
 v0 = 1
 
 # simulation parameters

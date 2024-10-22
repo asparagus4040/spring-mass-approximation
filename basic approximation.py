@@ -11,8 +11,8 @@ x0 = 1
 v0 = 1
 
 # simulation parameters
-dt = 0.2
-iterations = 100
+dt =0.1
+iterations = 200
 
 # empty arrays
 t = np.linspace(0, dt*(iterations-1), iterations)
@@ -36,6 +36,10 @@ for i in range(iterations - 1):
 
     # energy should stay constant
     energy[i+1] = 0.5*k*(x[i+1]**2) + 0.5*m*(v[i+1]**2)
+
+# get energy info
+print("initial energy:", energy[0])
+print("final energy:", energy[-1])
 
 # plot data
 fig, axs = plt.subplots(3, 2)

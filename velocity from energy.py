@@ -7,11 +7,11 @@ m = 1
 k = 1
 
 # initial conditions
-x0 = 0
+x0 = 1
 v0 = 1
 
 # simulation parameters
-dt = 0.015
+dt = 0.0075
 iterations = 100
 
 # empty arrays
